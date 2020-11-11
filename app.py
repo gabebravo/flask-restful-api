@@ -1,5 +1,6 @@
-from flask import Flask, request
-from flask_restful import Resource, Api, reqparse
+from flask import Flask  # , request
+from flask_restful import Resource, Api  # , reqparse
+# from typing import Any
 
 app = Flask(__name__)
 api = Api(app)
@@ -7,7 +8,7 @@ api = Api(app)
 
 class Item(Resource):
 
-    def get(self, name):
+    def get(self, name: str):
         return {'item': name}
 
 

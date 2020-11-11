@@ -1,2 +1,6 @@
 # misc
 .DS_Store
+*typings
+.vscode
+Pipfile.lock
+__pycache__
