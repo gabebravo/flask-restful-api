@@ -3,6 +3,7 @@ from flask_restful import Resource, Api
 #  from typing import Any, Generic, Optional, TypeVar
 
 app = Flask(__name__)
+app.secret_key = 'yowzers'  # in produciton make this an env var - DO NOT EXPOSE
 api = Api(app)
 
 items = []
