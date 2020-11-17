@@ -16,7 +16,7 @@ class ItemList(Resource):
 class Item(Resource):
 
     def get(self, name: str):
-        item_by_name = {'item': next(  # next is an iterator helper
+        item_by_name = {'item': next(  # next returns first value on the filter function
             filter(lambda x: x['name'] == name, items), None)}
         # ternary returns 400 status code if item not found
         return item_by_name if item_by_name['item'] else (item_by_name, 400)
@@ -25,7 +25,7 @@ class Item(Resource):
         data = request.get_json()
 
         if next(filter(lambda x: x['name'] == data['name'], items), None) is not None:
-            return {'message': f"An item with name {data['name']} already exists."}
+            return {'message': f"An item with name {data['name']} already exists."}, 400
 
         item = {'name': data['name'], 'price': data['price']}
         items.append(item)
