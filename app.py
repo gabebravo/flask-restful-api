@@ -36,6 +36,15 @@ class Item(Resource):
         items.append(item)
         return item, 201
 
+    def delete(self):
+        global items
+        data = request.get_json()
+        print(data)
+        items = list(
+            filter(lambda item: item['name'] != data['name'], items))
+
+        return {'message': f"Items deleted"}, 200
+
 
 api.add_resource(ItemList, '/items')
 api.add_resource(Item, '/item', '/item/<string:name>')
