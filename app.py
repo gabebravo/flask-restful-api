@@ -1,10 +1,14 @@
+from security import authenticate, identity
 from flask import Flask, request
 from flask_restful import Resource, Api
+from flask_jwt import JWT, jwt_required
 #  from typing import Any, Generic, Optional, TypeVar
 
 app = Flask(__name__)
 app.secret_key = 'yowzers'  # in produciton make this an env var - DO NOT EXPOSE
 api = Api(app)
+jwt = JWT(app, authenticate, identity)  # this will forward to the /auth route
+# first calls authenticate, gets JWT, and then forwards it to identity
 
 items = []
 
@@ -15,7 +19,7 @@ class ItemList(Resource):
 
 
 class Item(Resource):
-
+    @jwt_required()  # decorator will do the auth check before accessing the GET
     def get(self, name: str):
         item_by_name = {'item': next(  # next returns first value on the filter function
             filter(lambda x: x['name'] == name, items), None)}

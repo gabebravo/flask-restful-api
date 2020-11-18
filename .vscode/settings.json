@@ -1,5 +1,5 @@
 {
-  "python.pythonPath": "/Users/gabebravo/.pyenv/versions/3.7.3/bin/python",
+  "python.pythonPath": "/Users/gabebravo/.local/share/virtualenvs/flask-restful-api-Y6KUaT2q/bin/python",
   "python.analysis.typeCheckingMode": "basic",
   "python.linting.flake8Enabled": false,
   "python.linting.enabled": true,
