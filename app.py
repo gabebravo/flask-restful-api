@@ -1,6 +1,6 @@
 from security import authenticate, identity
 from flask import Flask, request
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
 from flask_jwt import JWT, jwt_required
 #  from typing import Any, Generic, Optional, TypeVar
 
@@ -19,6 +19,20 @@ class ItemList(Resource):
 
 
 class Item(Resource):
+    # will only allow these keys to be parsed from the request payload
+    parser = reqparse.RequestParser()
+    parser.add_argument('name',
+                        type=str,
+                        required=True,
+                        help="This field cannot be left blank!"
+                        )
+
+    parser.add_argument('price',
+                        type=float,
+                        required=True,
+                        help="This field cannot be left blank!"
+                        )
+
     @jwt_required()  # decorator will do the auth check before accessing the GET
     def get(self, name: str):
         item_by_name = {'item': next(  # next returns first value on the filter function
@@ -27,7 +41,7 @@ class Item(Resource):
         return item_by_name if item_by_name['item'] else (item_by_name, 400)
 
     def post(self):
-        data = request.get_json()
+        data = Item.parser.parse_args()  # parsed request payload
 
         if next(filter(lambda x: x['name'] == data['name'], items), None) is not None:
             return {'message': f"An item with name {data['name']} already exists."}, 400
@@ -38,7 +52,7 @@ class Item(Resource):
 
     def delete(self):
         global items  # this is used for overwriting the global var with assignment below
-        data = request.get_json()
+        data = request.get_json()  # entire request payload, not parsed
         print(data)
         items = list(
             filter(lambda item: item['name'] != data['name'], items))
@@ -46,7 +60,7 @@ class Item(Resource):
         return {'message': f"Items deleted"}, 200
 
     def put(self):
-        data = request.get_json()
+        data = Item.parser.parse_args()
         item = next(
             filter(lambda x: x['name'] == data['name'], items), None)
 
