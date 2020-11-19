@@ -37,7 +37,7 @@ class Item(Resource):
         return item, 201
 
     def delete(self):
-        global items
+        global items  # this is used for overwriting the global var with assignment below
         data = request.get_json()
         print(data)
         items = list(
@@ -53,7 +53,7 @@ class Item(Resource):
         if(item is None):
             items.append(data)
         else:
-            item.update(data)
+            item.update(data)  # can simply update the found item
 
         return data, 201
 
