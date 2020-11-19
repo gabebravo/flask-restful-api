@@ -33,7 +33,7 @@ class Item(Resource):
             return {'message': f"An item with name {data['name']} already exists."}, 400
 
         item = {'name': data['name'], 'price': data['price']}
-        items.append(item)
+        items.append(data)
         return item, 201
 
     def delete(self):
@@ -44,6 +44,18 @@ class Item(Resource):
             filter(lambda item: item['name'] != data['name'], items))
 
         return {'message': f"Items deleted"}, 200
+
+    def put(self):
+        data = request.get_json()
+        item = next(
+            filter(lambda x: x['name'] == data['name'], items), None)
+
+        if(item is None):
+            items.append(data)
+        else:
+            item.update(data)
+
+        return data, 201
 
 
 api.add_resource(ItemList, '/items')
